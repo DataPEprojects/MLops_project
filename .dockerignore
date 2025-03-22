@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+MLproject_DU/
+
+# Git
+.git
+.gitignore
+
+# MLflow runs
+mlruns/
+
+# VSCode or PyCharm
+.vscode/
+.idea/
+
+# Data you don't need in container
+*.csv
+*.pkl
