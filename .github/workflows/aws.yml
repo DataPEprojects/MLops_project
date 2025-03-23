@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: eu-west-3                   # Ta région AWS
+  AWS_REGION: us-east-1                   # Ta région AWS
   ECR_REPOSITORY: pedataproject/mlops_project  # Ton dépôt ECR (si tu utilises ECR)
   ECS_SERVICE: mlops_service              # Le nom de ton service ECS
   ECS_CLUSTER: mlops_cluster_final_project  # Le nom de ton cluster ECS
