@@ -5,12 +5,12 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-east-1                   # Ta région AWS
-  ECR_REPOSITORY: pedataproject/mlops_project  # Ton dépôt ECR (si tu utilises ECR privé)
+  AWS_REGION: us-east-1                   # Région AWS (North Virginia)
+  ECR_REPOSITORY: mlops                   # Nom de ton dépôt ECR (l'URL sera : 048091889212.dkr.ecr.us-east-1.amazonaws.com/mlops)
   ECS_SERVICE: mlops_service              # Le nom de ton service ECS
   ECS_CLUSTER: mlops_cluster_final_project  # Le nom de ton cluster ECS
   ECS_TASK_DEFINITION: mlops_task_def     # Le nom de ta Task Definition
-  CONTAINER_NAME: mlops_app               # Le nom du conteneur dans ta Task Definition
+  CONTAINER_NAME: mlops_app               # Le nom du conteneur dans la Task Definition
 
 permissions:
   contents: read
@@ -42,9 +42,11 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REPOSITORY .
-          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # Construire l'image Docker depuis le Dockerfile
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          # Pousser l'image vers Amazon ECR
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # Sauvegarder l'URL de l'image pour les étapes suivantes
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Download task definition
