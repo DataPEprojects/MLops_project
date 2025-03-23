@@ -14,8 +14,6 @@ mlruns/
 # Data (optionnel)
 # *.csv
 
-# Model files
-*.pkl
 
 # Logs
 *.log
