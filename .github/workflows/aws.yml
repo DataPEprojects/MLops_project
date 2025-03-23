@@ -5,12 +5,12 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-east-1                   # Ta région AWS
-  ECR_REPOSITORY: pedataproject/mlops_project  # Ton dépôt ECR (si tu utilises ECR)
-  ECS_SERVICE: mlops_service              # Le nom de ton service ECS
-  ECS_CLUSTER: mlops_cluster_final_project  # Le nom de ton cluster ECS
-  ECS_TASK_DEFINITION: mlops_task_def     # Le nom de ta Task Definition
-  CONTAINER_NAME: mlops_app               # Le nom du conteneur dans la Task Definition
+  AWS_REGION: us-east-1                   
+  ECR_REPOSITORY: public.ecr.aws/o1p2h2f3/pedataproject/mlops_project
+  ECS_SERVICE: mlops_service              
+  ECS_CLUSTER: mlops_cluster_final_project  
+  ECS_TASK_DEFINITION: mlops_task_def     
+  CONTAINER_NAME: mlops_app             
 
 permissions:
   contents: read
