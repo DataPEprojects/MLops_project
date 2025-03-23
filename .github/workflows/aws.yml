@@ -5,12 +5,14 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-east-1                   
-  ECR_REPOSITORY: public.ecr.aws/o1p2h2f3/pedataproject/mlops_project
-  ECS_SERVICE: mlops_service              
-  ECS_CLUSTER: mlops_cluster_final_project  
-  ECS_TASK_DEFINITION: mlops_task_def     
-  CONTAINER_NAME: mlops_app             
+  AWS_REGION: us-east-1
+  # Pour un référentiel public, on sépare le registre et le nom du dépôt
+  ECR_REGISTRY: public.ecr.aws/o1p2h2f3
+  ECR_REPOSITORY: pedataproject/mlops_project
+  ECS_SERVICE: mlops_service
+  ECS_CLUSTER: mlops_cluster_final_project
+  ECS_TASK_DEFINITION: mlops_task_def
+  CONTAINER_NAME: mlops_app
 
 permissions:
   contents: read
@@ -32,19 +34,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
+      - name: Login to Amazon ECR Public
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-public-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR Public
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          echo "IMAGE_TAG=${{ github.sha }}"
           # Construire l'image Docker depuis le Dockerfile
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          # Pousser l'image vers Amazon ECR
+          docker build -t $ECR_REPOSITORY .
+          # Taguer l'image avec le tag unique basé sur le commit
+          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # Pousser l'image dans le référentiel public
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           # Sauvegarder l'URL de l'image pour les étapes suivantes
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
